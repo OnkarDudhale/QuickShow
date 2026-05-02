@@ -16,11 +16,14 @@ const ListBookings = () => {
       const { data } = await axios.get('/api/admin/all-bookings', {
         headers: { Authorization: `Bearer ${await getToken()}` }
       })
-      setBookings(data.bookings)
-      setIsLoading(false)
+      if (data.success) {
+        setBookings(data.bookings)
+        setIsLoading(false)
+      }
     } catch (error) {
       console.error(error)
     }
+
   };
 
   useEffect(() => {
