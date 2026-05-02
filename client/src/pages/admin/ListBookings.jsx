@@ -17,10 +17,10 @@ const ListBookings = () => {
         headers: { Authorization: `Bearer ${await getToken()}` }
       })
       setBookings(data.bookings)
+      setIsLoading(false)
     } catch (error) {
       console.error(error)
     }
-    setIsLoading(false)
   };
 
   useEffect(() => {
