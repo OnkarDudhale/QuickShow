@@ -34,7 +34,7 @@ const ListBookings = () => {
 
   if (isLoading) return <Loading />
 
-  if (validBookings.length === 0) {
+  if (bookings.length === 0) {
     return <p>No Bookings available</p>
   }
 
