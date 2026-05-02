@@ -32,9 +32,11 @@ const ListBookings = () => {
     }
   }, [user])
 
+  const validBookings = bookings.filter(b => b.show && b.show.movie);
+
   if (isLoading) return <Loading />
 
-  if (bookings.length === 0) {
+  if (validBookings.length === 0) {
     return <p>No Bookings available</p>
   }
 
@@ -53,7 +55,7 @@ const ListBookings = () => {
             </tr>
           </thead>
           <tbody className="text-sm font-light">
-            {bookings.filter(b => b.show && b.show.movie).map((item) => (
+            {validBookings.map((item) => (
               <tr key={item._id} className="border-b border-primary/20 bg-primary/5 even:bg-primary/10">
                 <td className="p-2 min-w-45 pl-5">{item.user.name}</td>
                 <td className="p-2">{item.show.movie.title}</td>
