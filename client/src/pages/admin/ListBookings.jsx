@@ -32,9 +32,13 @@ const ListBookings = () => {
     }
   }, [user])
 
-  if (bookings.length === 0) return <p>No Bookings available</p>
+  if (isLoading) return <Loading />
 
-  return !isLoading ? (
+  if (validBookings.length === 0) {
+    return <p>No Bookings available</p>
+  }
+
+  return (
     <>
       <Title text1='List' text2='Bookings' />
       <div className="max-w-4xl mt-6 overflow-x-auto">
@@ -62,8 +66,6 @@ const ListBookings = () => {
         </table>
       </div>
     </>
-  ) : (
-    <Loading />
   )
 }
 
