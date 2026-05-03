@@ -15,7 +15,7 @@ const TrailersSection = () => {
         }
     }, [shows])
 
-    return (
+    return (shows.length > 0 && (
         <div id='trailer' className='px-6 md:px-16 lg:px-24 py-20 overflow-hidden'>
             <p className='text-gray-300 font-medium text-lg max-w-[968px] '>Trailers</p>
             <div className='relative mt-6'>
@@ -33,7 +33,7 @@ const TrailersSection = () => {
 
             </div>
         </div>
-    )
+    ))
 }
 
 export default TrailersSection;

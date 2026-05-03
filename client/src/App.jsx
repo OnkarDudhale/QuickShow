@@ -16,7 +16,6 @@ import ListBookings from './pages/admin/ListBookings'
 import { useAppContext } from '../context/AppContext'
 import { SignIn } from '@clerk/clerk-react'
 import Loading from './components/Loading'
-import HeroSectionEdit from './pages/admin/HeroSectionEdit'
 import ScrollToHash from '../utils/ScrollToHash'
 import Releases from './pages/Releases'
 
@@ -48,7 +47,6 @@ const App = () => {
           <Route path='add-shows' element={<AddShows />} />
           <Route path='list-shows' element={<ListShows />} />
           <Route path='list-bookings' element={<ListBookings />} />
-          <Route path='edit_hero-section' element={<HeroSectionEdit />} />
         </Route>
       </Routes>
       {!isAdminRoute && <Footer />}
