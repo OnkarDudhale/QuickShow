@@ -22,6 +22,17 @@ const AddShows = () => {
   const [addingShow, setAddingShow] = useState(false)
   const [url, setUrl] = useState("");
 
+  useEffect(() => {
+    if (dateTimeSelection) {
+      console.log(dateTimeSelection)
+    }
+  }, [dateTimeSelection])
+
+  useEffect(() => {
+    if (dateTimeInput) {
+      console.log(dateTimeInput)
+    }
+  }, [dateTimeInput])
 
   const handleDateTimeAdd = () => {
     if (!dateTimeInput) return;
