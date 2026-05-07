@@ -5,7 +5,7 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 const MovieCard = ({ movie }) => {
-    const { image_base_url, axios } = useAppContext()
+    const { image_base_url, axios, getToken } = useAppContext()
     const navigate = useNavigate()
 
     const location = useLocation();
@@ -13,7 +13,8 @@ const MovieCard = ({ movie }) => {
 
     const handleRemove = async (movieId) => {
         try {
-            const res = await axios.post('/api/user/removeFavourite', { movieId });
+            const res = await axios.post('/api/user/removeFavourite', { headers: { Authorization: `Bearer ${await getToken()}` } }
+                , { movieId });
             if (res.data.success) {
                 toast.success(res.data.message);
             }

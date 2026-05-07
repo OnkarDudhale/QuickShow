@@ -5,7 +5,7 @@ import Movie from '../models/Movie.js'
 //API controller function to get user bookings
 export const getUserBookings = async (req, res) => {
     try {
-        const user = req.auth().userId;
+        const user = req.auth()?.userId;
         const bookings = await Booking.find({ user }).populate({ path: 'show', populate: { path: 'movie' } }).sort({ createdAt: -1 })
         const validBookings = bookings.filter(
             b => b.show && b.show.movie
@@ -21,7 +21,11 @@ export const getUserBookings = async (req, res) => {
 export const updateFavourite = async (req, res) => {
     try {
         const { movieId } = req.body;
-        const userId = req.auth().userId;
+        const userId = req.auth()?.userId;
+
+        if (!userId) {
+            return res.json({ success: false, message: "Unauthorized user" });
+        }
         const user = await clerkClient.users.getUser(userId);
 
         if (!user.privateMetadata.favourites) {
@@ -46,7 +50,8 @@ export const updateFavourite = async (req, res) => {
 //API to get favourites
 export const getFavourites = async (req, res) => {
     try {
-        const user = await clerkClient.users.getUser(req.auth().userId)
+        const user = await clerkClient.users.getUser(req.auth()?.userId)
+
         const favourites = user.privateMetadata.favourites;
 
         //Getting movies from database
@@ -63,16 +68,26 @@ export const getFavourites = async (req, res) => {
 export const removeFavourite = async (req, res) => {
     try {
         const { movieId } = req.body;
-        const userId = req.auth().userId;
-        const user = await clerkClient.users.getUser(userId);
+        const userId = req.auth()?.userId;
 
-        if (user.privateMetadata.favourites.includes(movieId)) {
-            user.privateMetadata.favourites = user.privateMetadata.favourites.filter(id => id !== movieId)
+        if (!userId) {
+            return res.json({ success: false, message: "Unauthorized user" });
         }
 
-        await clerkClient.users.updateUserMetadata(userId, { privateMetadata: user.privateMetadata })
+        const user = await clerkClient.users.getUser(userId);
 
-        return res.json({ success: true, message: "Movie Removed from favorite" });
+        const favourites = user.privateMetadata?.favourites || [];
+
+        const updatedFavourites = favourites.filter(id => id !== movieId);
+
+        await clerkClient.users.updateUserMetadata(userId, {
+            privateMetadata: {
+                ...user.privateMetadata,
+                favourites: updatedFavourites
+            }
+        })
+
+        return res.json({ success: true, message: "Movie removed from favorite" });
 
     } catch (error) {
         console.log(error.message);
