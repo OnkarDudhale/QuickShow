@@ -5,7 +5,7 @@ import Movie from '../models/Movie.js'
 //API controller function to get user bookings
 export const getUserBookings = async (req, res) => {
     try {
-        const user = req.auth()?.userId;
+        const user = req.auth().userId;
         const bookings = await Booking.find({ user }).populate({ path: 'show', populate: { path: 'movie' } }).sort({ createdAt: -1 })
         const validBookings = bookings.filter(
             b => b.show && b.show.movie
@@ -21,7 +21,7 @@ export const getUserBookings = async (req, res) => {
 export const updateFavourite = async (req, res) => {
     try {
         const { movieId } = req.body;
-        const userId = req.auth()?.userId;
+        const userId = req.auth().userId;
 
         if (!userId) {
             return res.json({ success: false, message: "Unauthorized user" });
@@ -50,7 +50,7 @@ export const updateFavourite = async (req, res) => {
 //API to get favourites
 export const getFavourites = async (req, res) => {
     try {
-        const user = await clerkClient.users.getUser(req.auth()?.userId)
+        const user = await clerkClient.users.getUser(req.auth().userId)
 
         const favourites = user.privateMetadata.favourites;
 
@@ -68,7 +68,7 @@ export const getFavourites = async (req, res) => {
 export const removeFavourite = async (req, res) => {
     try {
         const { movieId } = req.body;
-        const userId = req.auth()?.userId;
+        const userId = req.auth().userId;
 
         if (!userId) {
             return res.json({ success: false, message: "Unauthorized user" });
@@ -87,7 +87,7 @@ export const removeFavourite = async (req, res) => {
             }
         })
 
-        return res.json({ success: true, message: "Movie removed from favorite" });
+        return res.json({ success: true, message: "Movie removed from favorites" });
 
     } catch (error) {
         console.log(error.message);

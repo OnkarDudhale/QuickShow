@@ -5,7 +5,7 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 const MovieCard = ({ movie }) => {
-    const { image_base_url, axios, getToken } = useAppContext()
+    const { image_base_url, axios, getToken, fetchFavouriteMovies } = useAppContext()
     const navigate = useNavigate()
 
     const location = useLocation();
@@ -13,10 +13,13 @@ const MovieCard = ({ movie }) => {
 
     const handleRemove = async (movieId) => {
         try {
-            const res = await axios.post('/api/user/removeFavourite', { headers: { Authorization: `Bearer ${await getToken()}` } }
-                , { movieId });
+            const token = await getToken();
+            const res = await axios.post('/api/user/removeFavourite', { movieId },
+                { headers: { Authorization: `Bearer ${token}` } });
+
             if (res.data.success) {
                 toast.success(res.data.message);
+                fetchFavouriteMovies()
             }
         } catch (error) {
             console.log(error.message);
@@ -31,8 +34,6 @@ const MovieCard = ({ movie }) => {
 
             <p className="font-semibold mt-2 truncate">{movie.title}</p>
             <p className="text-sm text-gray-400 mt-2 ">{movie.release_date}</p>
-
-
 
             <p>{movie.genres.slice(0, 2).map(genre => genre.name).join('|')} <Dot className="inline w-4 h-4" /> {timeFormat(movie.runtime)}</p>
 
