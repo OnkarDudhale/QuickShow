@@ -22,18 +22,6 @@ const AddShows = () => {
   const [addingShow, setAddingShow] = useState(false)
   const [url, setUrl] = useState("");
 
-  useEffect(() => {
-    if (dateTimeSelection) {
-      console.log(dateTimeSelection)
-    }
-  }, [dateTimeSelection])
-
-  useEffect(() => {
-    if (dateTimeInput) {
-      console.log(dateTimeInput)
-    }
-  }, [dateTimeInput])
-
   const handleDateTimeAdd = () => {
     if (!dateTimeInput) return;
     const [date, time] = dateTimeInput.split("T");
@@ -179,7 +167,13 @@ const AddShows = () => {
                 <div className="flex flex-wrap gap-2 mt-1 text-sm">
                   {times.map((time) => (
                     <div key={time} className="border border-primary px-2 py-1 flex items-center rounded">
-                      <span>{time}</span>
+                      <span>
+                        {new Date(dateTimeInput).toLocaleTimeString("en-IN", {
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </span>
                       <DeleteIcon onClick={() => handleRemoveTime(date, time)} width={15} className="ml-2 text-red-500 hover:text-red-700 cursor-pointer" />
                     </div>
                   ))}

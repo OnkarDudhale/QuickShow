@@ -58,3 +58,24 @@ export const getFavourites = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
+//Api to remove movie from favourite
+export const removeFavourite = async (req, res) => {
+    try {
+        const { movieId } = req.body;
+        const userId = req.auth().userId;
+        const user = await clerkClient.users.getUser(userId);
+
+        if (user.privateMetadata.favourites.includes(movieId)) {
+            user.privateMetadata.favourites = user.privateMetadata.favourites.filter(id => id !== movieId)
+        }
+
+        await clerkClient.users.updateUserMetadata(userId, { privateMetadata: user.privateMetadata })
+
+        return res.json({ success: true, message: "Movie Removed from favorite" });
+
+    } catch (error) {
+        console.log(error.message);
+        return res.json({ success: false, message: error.message })
+    }
+}

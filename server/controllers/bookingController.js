@@ -32,7 +32,6 @@ export const createBooking = async (req, res) => {
             return res.json({ success: false, message: "Show not found" })
         }
 
-        // ✅ Check availability (pending + occupied)
         const isAvailable = selectedSeats.every(
             seat => !showData.occupiedSeats[seat] && !showData.pendingSeats?.[seat]
         );
@@ -41,7 +40,6 @@ export const createBooking = async (req, res) => {
             return res.json({ success: false, message: "Seats not available" })
         }
 
-        // ✅ Create booking (PENDING)
         const booking = await Booking.create({
             user: userId,
             show: showId,
@@ -63,7 +61,7 @@ export const createBooking = async (req, res) => {
         showData.markModified('pendingSeats');
         await showData.save();
 
-        // ✅ Stripe session
+        //  Stripe session
         const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
 
         const session = await stripeInstance.checkout.sessions.create({
@@ -132,7 +130,6 @@ export const stripeWebhooks = async (req, res) => {
     try {
         switch (event.type) {
 
-            // ✅ PAYMENT SUCCESS
             case "checkout.session.completed": {
                 const session = event.data.object;
                 const { bookingId } = session.metadata;
@@ -142,7 +139,7 @@ export const stripeWebhooks = async (req, res) => {
 
                 const show = await Show.findById(booking.show);
 
-                // ✅ Move seats: pending → occupied
+                //  Move seats: pending → occupied
                 booking.bookedSeats.forEach(seat => {
                     delete show.pendingSeats?.[seat];
                     show.occupiedSeats[seat] = booking.user;
@@ -164,7 +161,6 @@ export const stripeWebhooks = async (req, res) => {
                 break;
             }
 
-            // ❌ Payment expired / failed
             case "checkout.session.expired": {
                 const session = event.data.object;
                 const { bookingId } = session.metadata;
@@ -174,7 +170,7 @@ export const stripeWebhooks = async (req, res) => {
 
                 const show = await Show.findById(booking.show);
 
-                // ✅ Release seats
+                //  Release seats
                 booking.bookedSeats.forEach(seat => {
                     delete show.pendingSeats?.[seat];
                 });
