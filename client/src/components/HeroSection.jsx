@@ -44,9 +44,9 @@ const HeroSection = () => {
                             <div className="flex flex-col  gap-4 text-gray-300 mt-4">
                                 <div className="flex flex-row max-sm:flex-col items-center gap-3">
                                     <div className="genre">
-                                        | {show.genres?.map((genre) => (
-                                            <span key={genre.id}>{genre.name} | </span>
-                                        ))}
+                                        {show.genres?.map((genre) => (
+                                            genre.name
+                                        )).join(' | ')}
                                     </div>
 
                                     <div className="flex items-center gap-2">
