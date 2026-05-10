@@ -55,9 +55,10 @@ const AddShows = () => {
       if (!selectedMovie || Object.keys(dateTimeSelection).length === 0 || !showPrice) {
         return toast("Missing required fields");
       }
-      const showsInput = Object.entries(dateTimeSelection).map(([date, time]) => (
-        { date, time }
-      ))
+      const showsInput = Object.entries(dateTimeSelection).map(([date, times]) => ({
+        date,
+        times,
+      }));
       const payload = {
         movieId: selectedMovie,
         showsInput,
@@ -151,7 +152,7 @@ const AddShows = () => {
       {/* Date and Time Selection */}
       <div className="mt-6">
         <label htmlFor="dateTime" className="block text-sm font-medium mb-2">Select Date and Time</label>
-        <div className="inline-flex gap-5 border border-gray-600 p-1 pl03 rounded-lg">
+        <div className="inline-flex gap-5 border border-gray-600 p-1 pl-3 rounded-lg">
           <input id="dateTime" type="datetime-local" value={dateTimeInput} onChange={(e) => setDateTimeInput(e.target.value)} className="outline-none rounded-md" />
           <button onClick={handleDateTimeAdd} className="bg-primary/80 text-white px-3 py-2 text-sm rounded-lg hover:bg-primary cursor-pointer">Add Time</button>
         </div>
@@ -168,7 +169,7 @@ const AddShows = () => {
                   {times.map((time) => (
                     <div key={time} className="border border-primary px-2 py-1 flex items-center rounded">
                       <span>
-                        {new Date(dateTimeInput).toLocaleTimeString("en-IN", {
+                        {new Date(`${date}T${time}`).toLocaleTimeString("en-IN", {
                           hour: "numeric",
                           minute: "2-digit",
                           hour12: true,

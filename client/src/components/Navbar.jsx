@@ -28,7 +28,7 @@ const Navbar = () => {
         <div className='lg:hidden lg:rounded-full backdrop-blur bg-black/70 lg:bg-white/10 lg:border border-gray-300/20 overflow-hidden transition-[width] duration-300'>
           <NavLink onClick={() => { scrollTo(0, 0); setIsOpen(false) }} to='/admin'>admin</NavLink>
         </div>
-        {favouriteMovies.length > 0 && <NavLink onClick={() => { scrollTo(0, 0); setIsOpen(false) }} to='/favourite'>Favourites</NavLink>}
+        {favouriteMovies.length > 0 && <NavLink onClick={() => { scrollTo(0, 0); setIsOpen(false) }} to='/favourites'>Favourites</NavLink>}
       </div>
       <div className='max-lg:hidden px-5 py-3 lg:rounded-3xl backdrop-blur bg-black/70 lg:bg-white/10 lg:border border-gray-300/20 overflow-hidden transition-[width] duration-300'>
         <NavLink onClick={() => { scrollTo(0, 0); setIsOpen(false) }} to='/admin'>admin</NavLink>

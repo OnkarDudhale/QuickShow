@@ -51,6 +51,11 @@ const MovieDetails = () => {
     getShow();
   }, [id])
 
+  const recommendedMovies = shows.filter(
+    (movie) => movie?._id !== show?.movie?._id
+  );
+
+
   function getFirstAndLastName(fullName) {
     if (!fullName) return "";
 
@@ -90,9 +95,9 @@ const MovieDetails = () => {
         </div>
       </div>
       {show.movie.casts.length > 0 ? (<>< p className='text-lg font-medium mt-20'>Your Favourite Cast</p>
-        <div className='overflow-x-auto no-scrollbar mt-8 pt-4'>
+        <div className='overflow-x-auto  mt-8 pt-4'>
           <div className='flex items-center gap-4 w-max px-4'>
-            {show.movie.casts.slice(0, 9).map((cast, index) => (
+            {show.movie.casts.slice(0, 10).map((cast, index) => (
               <div key={index} className='flex flex-col items-center text-center'>
                 <img src={cast.profile_path ? image_base_url + cast.profile_path : defaultImage} alt='cast image' className='rounded-full h-20 md:h-20 aspect-square object-cover' />
                 <p className='font-medium text-xs mt-3'>{getFirstAndLastName(cast.name)}</p>
@@ -102,18 +107,19 @@ const MovieDetails = () => {
         </div></>) : ""}
 
       <DateSelect dateTime={show.dateTime} id={id} user={user} />
-      <p className='text-lg font-medium mt-20 mb-8'>You May Also Like</p>
-      <div className='flex flex-wrap max-sm:justify-center gap-7'>
-        {shows.slice(0, 4).map((movie, index) => (
-          <MovieCard key={index} movie={movie} />
-        ))}
-      </div>
-      <div className='flex justify-center mt-20'>
-        <button onClick={() => { navigate('/movies'); scrollTo(0, 0) }} className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium cursor-pointer'>
-          Show more
-        </button>
-      </div>
-
+      {recommendedMovies.length !== 0 && <>
+        <p className='text-lg font-medium mt-20 mb-8'>You May Also Like</p>
+        <div className='flex flex-wrap max-sm:justify-center gap-7'>
+          {recommendedMovies.slice(0, 4).map((movie, index) => (
+            <MovieCard key={index} movie={movie} />
+          ))}
+        </div>
+        <div className='flex justify-center mt-20'>
+          <button onClick={() => { navigate('/movies'); scrollTo(0, 0) }} className='px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium cursor-pointer'>
+            Show more
+          </button>
+        </div>
+      </>}
     </div >
   ) : (
     <Loading />
